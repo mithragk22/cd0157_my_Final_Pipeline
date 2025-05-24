@@ -199,6 +199,7 @@ Resources:
     DependsOn:
       - CustomResourceLambda
       - CodeBuildServiceRole
+    Timeout: PT20M
 
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
