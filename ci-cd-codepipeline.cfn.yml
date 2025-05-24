@@ -25,7 +25,7 @@ Parameters:
   GitBranch:
     Type: String
     Default: master
-    Description: TODO - GitHub git repository branch - change triggers a new build
+    Description: GitHub git repository branch - change triggers a new build
     MinLength: 1
     MaxLength: 100
     ConstraintDescription: You must enter a GitHub repository branch name
@@ -33,7 +33,7 @@ Parameters:
   GitHubToken:
     Type: String
     NoEcho: true
-    Description: TODO - GitHub API token - see https://github.com/blog/1509-personal-api-tokens
+    Description: GitHub API token - see https://github.com/blog/1509-personal-api-tokens
     MinLength: 3
     MaxLength: 100
     ConstraintDescription: You must enter a GitHub personal access token
@@ -41,7 +41,7 @@ Parameters:
   GitHubUser:
     Type: String
     Default: mithragk22
-    Description: TODO - GitHub username or organization
+    Description: GitHub username or organization
     MinLength: 3
     MaxLength: 100
     ConstraintDescription: You must enter a GitHub username or organization
@@ -57,7 +57,7 @@ Parameters:
   KubectlRoleName:
     Type: String
     Default: UdacityFlaskDeployCBKubectlRole
-    Description: TODO - IAM role used by kubectl to interact with EKS cluster
+    Description: IAM role used by kubectl to interact with EKS cluster
     MinLength: 3
     MaxLength: 100
     ConstraintDescription: You must enter a kubectl IAM role
@@ -119,8 +119,10 @@ Resources:
         ZipFile: |
           import json
           import boto3
+          import cfnresponse
           from botocore.vendored import requests
           def handler(event, context):
+            # This comment was added to force an update on this function's code
             response = {
               'Status': 'SUCCESS',
               "Reason": "See the details in CloudWatch Log Stream: " + context.log_stream_name,
@@ -130,6 +132,8 @@ Resources:
               'LogicalResourceId': event['LogicalResourceId'],
               'Data': {"Message": "Resource creation successful!"},
             }
+
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, response, context.log_stream_name)
 
             client = boto3.client('iam')
             try:
@@ -161,7 +165,7 @@ Resources:
 
       Handler: index.handler
       Role: !GetAtt CustomResourceLambdaExecutionRole.Arn
-      Runtime: python3.10
+      Runtime: python3.12
       Timeout: 300
 
   CustomResourceLambdaExecutionRole:
@@ -198,7 +202,7 @@ Resources:
       CodeBuildServiceRoleArn: !GetAtt CodeBuildServiceRole.Arn
     DependsOn:
       - CustomResourceLambda
-      - CodeBuildServiceRole    
+      - CodeBuildServiceRole
 
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
