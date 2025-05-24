@@ -198,8 +198,7 @@ Resources:
       CodeBuildServiceRoleArn: !GetAtt CodeBuildServiceRole.Arn
     DependsOn:
       - CustomResourceLambda
-      - CodeBuildServiceRole
-    Timeout: PT20M
+      - CodeBuildServiceRole    
 
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
